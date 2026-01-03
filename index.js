@@ -2,6 +2,7 @@ import express from "express"
 import cors from "cors"
 import route from "./routes.js";
 import dotenv from "dotenv";
+import compression from "compression";
 
 const app = express();
 dotenv.config({
@@ -9,6 +10,7 @@ dotenv.config({
 })
 
 app.use(cors());
+app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use("/" , route)
