@@ -5,15 +5,13 @@ import dotenv from "dotenv";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken"
 import { verifyToken } from "./authMiddleware.js";
+import { connectDB } from "./db.js";
 
 dotenv.config({
   path: ".env",
 })
 
 const route = express.Router();
-mongoose.connect(`${process.env.MONGODB_URI}`, { dbName: "mp4vault" })
-  .then(() => console.log("MongoDB connected"))
-  .catch(err => console.error(err));
 
 
 route.get("/", (req, res) => {
@@ -26,6 +24,7 @@ route.get("/", (req, res) => {
 
 route.post("/create/user", async (req, res) => {
   try {
+    await connectDB();
     const { name, email, password, role = "user" } = req.body;
 
     // Check if user exists
@@ -63,6 +62,7 @@ route.post("/create/user", async (req, res) => {
 
 route.post("/login/user", async (req, res) => {
   try {
+    await connectDB();
     const { email, password } = req.body;
 
     // Validate input
@@ -112,6 +112,7 @@ route.post("/login/user", async (req, res) => {
 
 route.delete("/delete/user", verifyToken, async (req, res) => {
   try {
+    await connectDB();
     const userId = req.user.id;
 
     const user = await User.findByIdAndDelete(userId);
