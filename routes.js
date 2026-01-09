@@ -316,7 +316,7 @@ route.post("/login/user", async (req, res) => {
 });
 
 
-route.delete("/delete/user", verifyToken, async (req, res) => {
+route.delete("/user/delete", verifyToken, async (req, res) => {
   try {
     await connectDB();
     const userId = req.user.id;
